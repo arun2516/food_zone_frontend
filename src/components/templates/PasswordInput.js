@@ -30,7 +30,7 @@ const PasswordInput = ({ userDetails, setObjectValue, errorDetails, setErrorValu
             {error ?
                 <TextField
                     id="outlined-basic"
-                    label="Password"
+                    label="Password:(1234567890)"
                     variant="outlined"
                     type={showPassword ? 'text' : 'password'}
                     value={password}
@@ -51,7 +51,7 @@ const PasswordInput = ({ userDetails, setObjectValue, errorDetails, setErrorValu
                 :
                 <TextField
                     id="outlined-basic"
-                    label="Password"
+                    label="Password:(1234567890)"
                     variant="outlined"
                     type={showPassword ? 'text' : 'password'}
                     value={password}
