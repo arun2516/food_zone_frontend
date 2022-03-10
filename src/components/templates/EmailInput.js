@@ -30,7 +30,7 @@ const EmailInput = ({ userDetails, setObjectValue, errorDetails, setErrorValue }
                 :
                 <TextField
                     id="outlined-basic"
-                    label="Email"
+                    label="Email:(arunbond.p710@gmail.com)"
                     variant="outlined"
                     value={email}
                     onChange={handleEmailChange}
