@@ -74,7 +74,13 @@ const ItemAdd = ({ onAdd }) => {
         const file = e.target.files[0];
         let formData = new FormData()
         formData.append("file", file)
-        const response = await axios.post("https://foodie-zonee.herokuapp.com/items/upload",formData);
+        const response = await axios.post("https://foodie-zonee.herokuapp.com/items/upload",formData,{
+        headers: {
+            authorization: localStorage.getItem("token"),
+            'Content-Type': 'multipart/form-data'
+        }
+    }
+        )
         setItemDetails({
                     ...itemDetails,
                     image: response.data,
