@@ -8,6 +8,7 @@ import Typography from "@mui/material/Typography";
 import Swal from "sweetalert2";
 import Card from "@mui/material/Card";
 import useMediaQuery from '@mui/material/useMediaQuery';
+import StripeCheckout from "react-stripe-checkout";
 import AccountBalanceWalletIcon from '@mui/icons-material/AccountBalanceWallet';
 
 
@@ -33,7 +34,7 @@ const Wallet = () => {
     }, []);
 
     // Add money to wallet
-    const addMoney = () => {
+    const addMoney = async() => {
         if (amount === "" || error) {
             Swal.fire({
                 title: "Error",
@@ -45,7 +46,7 @@ const Wallet = () => {
             return;
         }
 
-        axios.patch("https://foodie-zonee.herokuapp.com/buyers/update_wallet", {
+        await axios.patch("https://foodie-zonee.herokuapp.com/buyers/update_wallet", {
             wallet: amount,
         }, {
             headers: {
@@ -120,14 +121,21 @@ const Wallet = () => {
                         onChange={handleAmountChange}
                     />
                 }
-                <Button
+              
+                <StripeCheckout
+                amount = {amount * 100}
+                stripeKey="pk_test_51KQSxQSAHGnQd7SyJSfJeTOull50XtPONlDXvBMkUTp8EhNf8f1rQVL5DG3JL2IrvfliV0kTnf2ZR1wilbZuP7uD00SIXULQlK"
+                token={addMoney}
+                currency="INR"
+                >
+                  <Button
                     variant="contained"
                     color="secondary"
-                    onClick={addMoney}
                     style={{ marginLeft: "0.5rem" }}
                 >
                     Add Money
                 </Button>
+                </StripeCheckout>
             </Stack>
         </Card>
     );

@@ -67,6 +67,23 @@ const ItemAdd = ({ onAdd }) => {
         });
     }
 
+    // handle images upload
+    const handleupload = async(e) =>{
+        e.preventDefault();
+        try{
+        const file = e.target.files[0];
+        let formData = new FormData()
+        formData.append("file", file)
+        const response = await axios.post("https://foodie-zonee.herokuapp.com/items/upload",formData);
+        setItemDetails({
+                    ...itemDetails,
+                    image: response.data,
+                })
+            }catch(err){
+                Swal.fire(err.response.data.msg)
+            }
+    }
+
     // Handle addons change
     const handleAddonsChange = event => {
         setAddonsString(event.target.value);
@@ -218,12 +235,13 @@ const ItemAdd = ({ onAdd }) => {
                                 <input
                                     type="file"
                                     hidden
-                                    onChange={e =>
-                                        setItemDetails({
-                                            ...itemDetails,
-                                            image: e.target.files[0],
-                                        })
-                                    }
+                                    onChange = {handleupload}
+                                    // onChange={e =>
+                                    //     setItemDetails({
+                                    //         ...itemDetails,
+                                    //         image: e.target.files[0],
+                                    //     })
+                                    // }
                                 />
                             </Button>
 
