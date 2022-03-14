@@ -14,9 +14,12 @@ import validator from 'validator';
 import Swal from 'sweetalert2';
 import axios from 'axios';
 import FormData from 'form-data';
+import { CircularProgressbar, buildStyles } from 'react-circular-progressbar';
+import 'react-circular-progressbar/dist/styles.css';
 
 
 const ItemAdd = ({ onAdd }) => {
+    const [uploaded,setuploaded] = useState(null);
     const [dialogOpen, setDialogOpen] = useState(false);
     const [itemDetails, setItemDetails] = useState({
         name: "",
@@ -39,7 +42,7 @@ const ItemAdd = ({ onAdd }) => {
         // Reset state
         setItemDetails({
             name: "",
-            image: null,
+            image: "",
             price: 0,
             category: "Vegetarian",
             tags: [],
@@ -74,19 +77,23 @@ const ItemAdd = ({ onAdd }) => {
         const file = e.target.files[0];
         let formData = new FormData()
         formData.append("file", file)
-        const response = await axios.post("https://foodie-zonee.herokuapp.com/items/upload",formData,{
-        headers: {
-            authorization: localStorage.getItem("token"),
-            'Content-Type': 'multipart/form-data'
-        }
-    }
-        )
-        setItemDetails({
-                    ...itemDetails,
-                    image: response.data,
-                })
+        formData.append("upload_preset","food_zone")
+        formData.append("cloud_name","dxukp4xux")
+        await axios.post("https://api.cloudinary.com/v1_1/dxukp4xux/image/upload",formData,
+        {
+            onUploadProgress:(progressEvent) => {
+               setuploaded(Math.floor(((progressEvent.loaded / 1000) * 100) / (progressEvent.total / 1000)))
+
+            },
+        })
+        .then(res=>{
+            setItemDetails({
+                ...itemDetails,image: res.data.url,
+            })
+        })
+       
             }catch(err){
-                Swal.fire(err.response.data.msg)
+                Swal.fire(err)
             }
     }
 
@@ -242,19 +249,33 @@ const ItemAdd = ({ onAdd }) => {
                                     type="file"
                                     hidden
                                     onChange = {handleupload}
-                                    // onChange={e =>
-                                    //     setItemDetails({
-                                    //         ...itemDetails,
-                                    //         image: e.target.files[0],
-                                    //     })
-                                    // }
+                                 
                                 />
                             </Button>
+                            {uploaded &&
+                            <div className="col-2">
+                                <CircularProgressbar
+                                value={uploaded}
+                                text={`${uploaded}%`}
+                                styles={
+                                    buildStyles({
+                                        rotation: 0.25,
+                                        strokeLinecap: 'butt',
+                                        textSize: '16px',
+                                        pathTransitionDuration: 0.5,
+                                        pathColor: `rgba(255, 136, 136, ${uploaded / 100})`,
+                                        textColor: '#f88',
+                                        trailColor: '#d6d6d6',
+                                        backgroundColor: '#3e98c7',
+                                    })
+                                }/>
+
+                            </div>}
 
                             {/* Uploaded Image Preview */}
                             {itemDetails.image &&
                                 <img
-                                    src={URL.createObjectURL(itemDetails.image)}
+                                    src={itemDetails.image}
                                     alt="item"
                                     style={{
                                         width: "25%",

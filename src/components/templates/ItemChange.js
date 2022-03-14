@@ -20,7 +20,7 @@ const ItemChange = ({ item, onEdit, onDelete }) => {
     const [dialogOpen, setDialogOpen] = useState(false);
     const [itemDetails, setItemDetails] = useState({
         name: item.name,
-        image: null,
+        image: "",
         price: item.price,
         category: item.category,
         tags: item.tags,
@@ -38,7 +38,7 @@ const ItemChange = ({ item, onEdit, onDelete }) => {
         // Reset state
         setItemDetails({
             name: item.name,
-            image: null,
+            image: "",
             price: item.price,
             category: item.category,
             tags: item.tags,
@@ -133,18 +133,18 @@ const ItemChange = ({ item, onEdit, onDelete }) => {
         const file = e.target.files[0];
         let formData = new FormData()
         formData.append("file", file)
-        const response = await axios.post("https://foodie-zonee.herokuapp.com/items/upload",formData, {
-            headers: {
-                authorization: localStorage.getItem("token"),
-                'Content-Type': 'multipart/form-data'
-            }
-        });
-        setItemDetails({
-                    ...itemDetails,
-                    image: response.data,
-                })
+        formData.append("upload_preset","food_zone")
+        formData.append("cloud_name","dxukp4xux")
+        await axios.post("https://api.cloudinary.com/v1_1/dxukp4xux/image/upload",formData)
+        .then(res=>{
+            setItemDetails({
+                ...itemDetails,
+                image: res.data.url,
+            })
+        })
+       
             }catch(err){
-                Swal.fire(err.response.data.msg)
+                Swal.fire(err)
             }
     }
 
