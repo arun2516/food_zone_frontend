@@ -51,7 +51,7 @@ const PasswordInput = ({ userDetails, setObjectValue, errorDetails, setErrorValu
                 :
                 <TextField
                     id="outlined-basic"
-                    label="Password:(1234567890)"
+                    label="Password:"
                     variant="outlined"
                     type={showPassword ? 'text' : 'password'}
                     value={password}

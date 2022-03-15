@@ -150,6 +150,16 @@ const Login = () => {
                     Login
                 </Button>
             </Grid>
+            <div>
+                <h1>User Credentials</h1>
+                <h3>Vendor</h3>
+                <h5>Email: arunbond.p710@gmail.com </h5>
+                <h5 style={{marginRight:"7%"}}>Password: 1234567890</h5>
+                <h3>Buyer</h3>
+                <h5 style={{marginRight:"3.5%"}}>Email: toarun25@gmail.com </h5> 
+                <h5 style={{marginRight:"7%"}}> Password: 1234567890</h5>
+
+            </div>
         </div>
     );
 };
